@@ -1,0 +1,59 @@
+flowchart TD
+    A[🚀 Inicio del Proceso] --> B{¿Usuario autenticado?}
+    B -->|Sí| C[📊 Dashboard Principal]
+    B -->|No| D[🔐 Página de Login]
+    
+    D --> E[📝 Ingresar Credenciales]
+    E --> F{¿Credenciales válidas?}
+    F -->|Sí| G[✅ Autenticación Exitosa]
+    F -->|No| H[❌ Error de Login]
+    
+    H --> I[🔄 Reintentar]
+    I --> E
+    
+    G --> C
+    C --> J[📋 Seleccionar Acción]
+    
+    J --> K[👤 Gestión de Usuarios]
+    J --> L[📈 Reportes]
+    J --> M[⚙️ Configuración]
+    J --> N[🚪 Cerrar Sesión]
+    
+    K --> O[➕ Crear Usuario]
+    K --> P[✏️ Editar Usuario]
+    K --> Q[🗑️ Eliminar Usuario]
+    
+    L --> R[📊 Generar Reporte]
+    L --> S[📤 Exportar Datos]
+    
+    M --> T[🔧 Configurar Sistema]
+    M --> U[🎨 Personalizar Interfaz]
+    
+    N --> V[🔒 Cerrar Sesión]
+    V --> D
+    
+    O --> W[💾 Guardar en BD]
+    P --> W
+    Q --> X[🗑️ Eliminar de BD]
+    
+    R --> Y[📄 Mostrar Resultados]
+    S --> Z[💾 Descargar Archivo]
+    
+    T --> AA[✅ Configuración Guardada]
+    U --> BB[🎨 Interfaz Actualizada]
+    
+    W --> CC[✅ Operación Exitosa]
+    X --> CC
+    
+    CC --> C
+    Y --> C
+    Z --> C
+    AA --> C
+    BB --> C
+    
+    style A fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style C fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    style D fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style H fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style G fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    style V fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Live Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.0/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🧜‍♀️ Mermaid Live Editor</h1>
+            <p>Editor en vivo para diagramas Mermaid</p>
+        </header>
+
+        <div class="toolbar">
+            <div class="file-controls">
+                <input type="file" id="fileInput" accept=".md,.mmd,.txt" style="display: none;">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <button id="loadFileBtn" class="btn btn-primary">📁 Cargar Archivo</button>
+                <button id="loadImageBtn" class="btn btn-info">🖼️ Cargar Imagen</button>
+                <button id="downloadBtn" class="btn btn-secondary">💾 Descargar</button>
+                <button id="clearBtn" class="btn btn-danger">🗑️ Limpiar</button>
+            </div>
+            <div class="view-controls">
+                <button id="toggleViewBtn" class="btn btn-info">🔄 Vista Dividida</button>
+                <button id="fullscreenBtn" class="btn btn-success">🖥️ Pantalla Completa</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="editor-panel" id="editorPanel">
+                <div class="panel-header">
+                    <h3>📝 Editor</h3>
+                    <div class="editor-controls">
+                        <select id="diagramType" class="diagram-selector">
+                            <option value="">Seleccionar tipo de diagrama</option>
+                            <option value="flowchart">Flowchart</option>
+                            <option value="sequence">Sequence Diagram</option>
+                            <option value="class">Class Diagram</option>
+                            <option value="state">State Diagram</option>
+                            <option value="er">Entity Relationship</option>
+                            <option value="gantt">Gantt Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="journey">User Journey</option>
+                            <option value="git">Git Graph</option>
+                        </select>
+                    </div>
+                </div>
+                <textarea id="mermaidCode" placeholder="Escribe tu código Mermaid aquí o carga un archivo...
+
+Ejemplo:
+graph TD
+    A[Inicio] --> B{¿Condición?}
+    B -->|Sí| C[Acción 1]
+    B -->|No| D[Acción 2]
+    C --> E[Fin]
+    D --> E"></textarea>
+            </div>
+
+            <div class="preview-panel" id="previewPanel">
+                <div class="panel-header">
+                    <h3>👁️ Vista Previa</h3>
+                <div class="preview-controls">
+                    <button id="refreshBtn" class="btn btn-small btn-info">🔄 Actualizar</button>
+                    <button id="exportImageBtn" class="btn btn-small btn-success">📷 Imagen</button>
+                    <button id="zoomOutBtn" class="btn btn-small">🔍-</button>
+                    <button id="resetZoomBtn" class="btn btn-small">🔍 Reset</button>
+                    <button id="zoomInBtn" class="btn btn-small">🔍+</button>
+                </div>
+                </div>
+                <div id="mermaidOutput" class="mermaid-container">
+                    <div class="placeholder">
+                        <p>🎨 Los diagramas aparecerán aquí</p>
+                        <p>Escribe código Mermaid en el editor o carga un archivo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-info">
+                <span id="statusText">Listo</span>
+                <span id="lineCount">Líneas: 0</span>
+                <span id="charCount">Caracteres: 0</span>
+            </div>
+            <div class="mermaid-version">
+                Mermaid v11.4.0
+            </div>
+        </div>
+
+        <div class="examples-section" id="examplesSection">
+            <h3>📚 Ejemplos</h3>
+            <div class="examples-grid">
+                <div class="example-card" data-type="flowchart">
+                    <h4>Flowchart</h4>
+                    <pre>graph TD
+    A[Inicio] --> B{Decisión}
+    B -->|Sí| C[Proceso 1]
+    B -->|No| D[Proceso 2]</pre>
+                </div>
+                <div class="example-card" data-type="sequence">
+                    <h4>Sequence Diagram</h4>
+                    <pre>sequenceDiagram
+    Alice->>Bob: Hola Bob
+    Bob-->>Alice: Hola Alice
+    Alice->>Bob: ¿Cómo estás?</pre>
+                </div>
+                <div class="example-card" data-type="class">
+                    <h4>Class Diagram</h4>
+                    <pre>classDiagram
+    class Animal {
+        +String name
+        +eat()
+        +sleep()
+    }</pre>
+                </div>
+                <div class="example-card" data-type="pie">
+                    <h4>Pie Chart</h4>
+                    <pre>pie title Distribución
+    "A" : 386
+    "B" : 85
+    "C" : 150</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

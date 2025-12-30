@@ -1,0 +1,43 @@
+sequenceDiagram
+    autonumber
+    participant FE as Frontend (opadmincr.coppel.io)
+    participant AP_Proxy as Apigee Proxy (Northbound)
+    participant AP_Target as Apigee Target (Southbound)
+    participant BE as Backend (ilb-southbound)
+
+    Note over FE, AP_Proxy: Paso 1: PreFlow (Seguridad y Tráfico)
+    FE->>AP_Proxy: POST /repair-orders/repair-process/orders/555/ticket
+    
+    rect rgb(240, 240, 240)
+        Note right of AP_Proxy: AM-LimitsManagement: (60k Quota, 1000ps Rate)
+        Note right of AP_Proxy: Q-QuotaLimit: Valida consumo
+        Note right of AP_Proxy: SA-RateLimit: Evita picos de tráfico
+        Note right of AP_Proxy: OAS-ValidateRequest: Valida vs YAML
+        Note right of AP_Proxy: CORS: Valida origen opadmincr.coppel.io
+        Note right of AP_Proxy: EV-RepairProcessId: Extrae {id} = 555
+    end
+
+    Note over AP_Proxy, AP_Target: Paso 2: Conditional Flows
+    alt es /repair-service/settings
+        AP_Proxy->>AP_Proxy: FC-ValidateJWToken (Shared Flow)
+    else es /repair-process/orders/555/ticket
+        Note right of AP_Proxy: Flow-RepairProcessTicket activo
+    end
+
+    Note over AP_Proxy, AP_Target: Paso 3: Target Request
+    AP_Proxy->>AP_Target: Solicitud validada
+    Note right of AP_Target: AM-ProxySuffixFalse: (target.copy.pathsuffix = false)
+    Note right of AP_Target: AM-RepairProcessTickets: <br/>Construye path: /v1/journeys/repair/.../orders/555/ticket
+
+    Note over AP_Target, BE: Paso 4: Southbound Connection
+    AP_Target->>BE: POST /envoy/postventa40/.../orders/555/ticket
+    BE-->>AP_Target: HTTP 201 Created (PDF Binary)
+
+    Note over AP_Target, FE: Paso 5: Response handling
+    AP_Target->>AP_Proxy: Retorna binario
+    Note right of AP_Proxy: AM-AddCORS: Agrega headers de seguridad
+    AP_Proxy-->>FE: HTTP 201 + PDF File
+    
+    Note over FE, AP_Proxy: Escenario de Error (FaultRules)
+    FE->>AP_Proxy: Petición Inválida
+    AP_Proxy-->>FE: HTTP 400 (AM-BadRequest: "Ups, Ocurrió un error...")

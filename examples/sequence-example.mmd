@@ -1,0 +1,68 @@
+sequenceDiagram
+    participant U as 👤 Usuario
+    participant F as 🌐 Frontend
+    participant A as 🔧 API Gateway
+    participant S as 🛡️ Servicio Auth
+    participant D as 🗄️ Base de Datos
+    participant C as 💾 Cache Redis
+    participant E as 📧 Servicio Email
+    
+    Note over U,E: Proceso de Autenticación y Registro
+    
+    U->>F: 1. Acceder a la aplicación
+    F->>A: 2. Solicitar página de login
+    A->>F: 3. Retornar formulario
+    F->>U: 4. Mostrar formulario de login
+    
+    U->>F: 5. Enviar credenciales
+    F->>A: 6. POST /auth/login
+    A->>S: 7. Validar credenciales
+    
+    alt Credenciales válidas
+        S->>D: 8. Consultar usuario
+        D-->>S: 9. Datos del usuario
+        S->>C: 10. Guardar sesión
+        C-->>S: 11. Sesión guardada
+        S->>A: 12. Token JWT + datos usuario
+        A->>F: 13. Respuesta exitosa
+        F->>U: 14. Redirigir a dashboard
+        
+        Note over U,D: Usuario autenticado exitosamente
+        
+    else Credenciales inválidas
+        S->>A: 15. Error de autenticación
+        A->>F: 16. Error 401
+        F->>U: 17. Mostrar mensaje de error
+        
+        Note over U,F: Reintento de autenticación
+        
+    else Usuario no existe
+        S->>A: 18. Usuario no encontrado
+        A->>F: 19. Sugerir registro
+        F->>U: 20. Mostrar opción de registro
+        
+        U->>F: 21. Completar formulario registro
+        F->>A: 22. POST /auth/register
+        A->>S: 23. Crear nuevo usuario
+        S->>D: 24. Insertar usuario
+        D-->>S: 25. Usuario creado
+        S->>E: 26. Enviar email verificación
+        E-->>S: 27. Email enviado
+        S->>A: 28. Registro exitoso
+        A->>F: 29. Confirmar registro
+        F->>U: 30. Mostrar mensaje verificación
+        
+        Note over U,E: Verificación por email pendiente
+    end
+    
+    rect rgb(240, 248, 255)
+        Note over U,E: Flujo de verificación de email
+        U->>E: 31. Clic en enlace de verificación
+        E->>A: 32. GET /auth/verify/{token}
+        A->>S: 33. Validar token
+        S->>D: 34. Activar cuenta
+        D-->>S: 35. Cuenta activada
+        S->>A: 36. Verificación exitosa
+        A->>F: 37. Redirigir a login
+        F->>U: 38. Cuenta verificada
+    end
