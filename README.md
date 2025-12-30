@@ -48,7 +48,7 @@ Un editor en vivo para diagramas Mermaid con interfaz moderna y funcionalidades 
 ## 🚀 Uso
 
 ### Acceso Directo
-Visita la aplicación en: [https://tu-usuario.github.io/mermaid-editor](https://tu-usuario.github.io/mermaid-editor)
+Visita la aplicación en: [https://ericcgame.github.io/MermaidLiveEditor](https://ericcgame.github.io/MermaidLiveEditor/)
 
 ### Uso Local
 1. Clona o descarga este repositorio
